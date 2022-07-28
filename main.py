@@ -13,7 +13,7 @@ def parse_args(args):
     parser = argparse.ArgumentParser(description='For Object Tracking')
     parser.add_argument('--mode', help='Single or Multiple', default="single")
     parser.add_argument('--tracker', help='The Tracking Algorithm', default="boosting")
-    parser.add_argument('--video', help='Path to the Video', default="video/IMG_0046.MP4")
+    parser.add_argument('--video', help='Path to the Video', default="videos/IMG_0046.MP4")
     return parser.parse_args(args)
 
 
