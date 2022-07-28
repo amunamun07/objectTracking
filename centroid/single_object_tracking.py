@@ -11,18 +11,21 @@ class SingleObjectTracking:
     def get_tracker(self):
         if self.tracker_type == "BOOSTING":
             return cv2.legacy.TrackerBoosting_create()
-        if self.tracker_type == "MIL":
+        elif self.tracker_type == "MIL":
             return cv2.legacy.TrackerMIL_create()
-        if self.tracker_type == "KCF":
+        elif self.tracker_type == "KCF":
             return cv2.legacy.TrackerKCF_create()
-        if self.tracker_type == "TLD":
+        elif self.tracker_type == "TLD":
             return cv2.legacy.TrackerTLD_create()
-        if self.tracker_type == "MEDIANFLOW":
+        elif self.tracker_type == "MEDIANFLOW":
             return cv2.legacy.TrackerMedianFlow_create()
-        if self.tracker_type == "MOSSE":
+        elif self.tracker_type == "MOSSE":
             return cv2.legacy.TrackerMOSSE_create()
-        if self.tracker_type == "CSRT":
+        elif self.tracker_type == "CSRT":
             return cv2.legacy.TrackerCSRT_create()
+        else:
+            print("tracker not found!")
+            sys.exit()
 
     def start_tracking(self):
         tracker = self.get_tracker()
@@ -33,7 +36,7 @@ class SingleObjectTracking:
             sys.exit()
         first_bbox = self.select_initial_bbox(first_frame)
         bbox_color = self.get_bbox_color()
-        ok = tracker.init(first_frame, first_bbox)
+        tracker.init(first_frame, first_bbox)
         while True:
             ok, frame = video.read()
             if not ok:
