@@ -62,7 +62,7 @@ class SingleObjectTracking:
 
     @staticmethod
     def select_initial_bbox(frame):
-        return cv2.selectROI(frame)
+        return cv2.selectROI("Single Tracker", frame)
 
     def get_video(self):
         video = cv2.VideoCapture(self.video)
