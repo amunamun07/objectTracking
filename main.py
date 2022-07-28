@@ -1,11 +1,15 @@
 import argparse
 from centroid.single_object_tracking import SingleObjectTracking
+from centroid.multiple_object_tracking import MultipleObjectTracking
 
 
 def main(args):
     args = parse_args(args)
     if args.mode.lower() == "single":
         parser = SingleObjectTracking(args.tracker, args.video)
+        parser.start_tracking()
+    if args.mode.lower() == "multiple":
+        parser = MultipleObjectTracking(args.tracker, args.video)
         parser.start_tracking()
 
 
