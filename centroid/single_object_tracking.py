@@ -23,6 +23,10 @@ class SingleObjectTracking:
             return cv2.legacy.TrackerMOSSE_create()
         elif self.tracker_type == "CSRT":
             return cv2.legacy.TrackerCSRT_create()
+        elif self.tracker_type == "DASIAMRPN":
+            return cv2.legacy.TrackerDaSiamRPN_create()
+        elif self.tracker_type == "GOTURN":
+            return cv2.legacy.TrackerGOTURN_create()
         else:
             print("tracker not found!")
             sys.exit()
@@ -30,24 +34,31 @@ class SingleObjectTracking:
     def start_tracking(self):
         tracker = self.get_tracker()
         video = self.get_video()
-        ok, first_frame = video.read()
-        if not ok:
-            print("Error while loading the frame!")
-            sys.exit()
-        first_bbox = self.select_initial_bbox(first_frame)
-        bbox_color = self.get_bbox_color()
-        tracker.init(first_frame, first_bbox)
         while True:
-            ok, frame = video.read()
+            ok, initial_frame = video.read()
             if not ok:
                 break
-            ok, bbox = tracker.update(frame)
+            frm = cv2.resize(initial_frame, (960, 540))
+            cv2.imshow("Tracking", frm)
+            k = cv2.waitKey(0) & 0xFF
+            if k == 113:
+                cv2.destroyAllWindows()
+                break
+        first_bbox = self.select_initial_bbox(frm)
+        bbox_color = self.get_bbox_color()
+        tracker.init(frm, first_bbox)
+        while True:
+            ok, frame = video.read()
+            frm = cv2.resize(frame, (960, 540))
+            if not ok:
+                break
+            ok, bbox = tracker.update(frm)
             if ok:
                 (x, y, w, h) = [int(v) for v in bbox]
-                cv2.rectangle(frame, (x, y), (x + w, y + h), bbox_color, 2, 1)
+                cv2.rectangle(frm, (x, y), (x + w, y + h), bbox_color, 2, 1)
             else:
                 cv2.putText(
-                    frame,
+                    frm,
                     "Tracking faliure!",
                     (100, 80),
                     cv2.FONT_HERSHEY_SIMPLEX,
@@ -56,7 +67,7 @@ class SingleObjectTracking:
                     2,
                 )
 
-            cv2.imshow("Tracking", frame)
+            cv2.imshow("Tracking", frm)
             if cv2.waitKey(1) & 0xFF == 27:
                 break
 

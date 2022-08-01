@@ -1,3 +1,5 @@
+import os.path
+
 import cv2
 import sys
 from random import randint
@@ -23,6 +25,10 @@ class MultipleObjectTracking:
             return cv2.legacy.TrackerMOSSE_create()
         elif self.tracker_type == "CSRT":
             return cv2.legacy.TrackerCSRT_create()
+        elif self.tracker_type == "DASIAMRPN":
+            return cv2.legacy.TrackerDaSiamRPN_create()
+        elif self.tracker_type == "GOTURN":
+            return cv2.legacy.TrackerGOTURN_create()
         else:
             print("tracker not found!")
             sys.exit()
